@@ -1,0 +1,6 @@
+services:
+  juryline:
+    image: ghcr.io/jdplays/nijel:latest
+    env_file:
+      - .env
+    restart: unless-stopped
