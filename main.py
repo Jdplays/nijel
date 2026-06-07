@@ -100,11 +100,13 @@ def get_court_rows(soup: BeautifulSoup, court: str) -> list[JuryRow]:
 def panel_matches(panel_text: str, juror_number: int) -> bool:
     text = panel_text.lower()
 
-    range_match = re.search(r"\b(\d+)\s*(?:to|-|until)\s*(\d+)\b", text)
-    if range_match:
+    range_matches = re.finditer(r"\b(\d+)\s*(?:to|-|until)\s*(\d+)\b", text)
+    for range_match in range_matches:
         start = int(range_match.group(1))
         end = int(range_match.group(2))
-        return start <= juror_number <= end
+
+        if start <= juror_number <= end:
+            return True
 
     exact_numbers = [int(value) for value in re.findall(r"\b\d+\b", text)]
     if juror_number in exact_numbers:
